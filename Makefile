@@ -27,8 +27,8 @@ migrate-create:
 
 .PHONY: migrate-up
 migrate-up:
-	docker-compose exec app migrate --source file://migrations --database ${DB_CONN} up 1
+	docker-compose exec app migrate --source file://migrations --database ${DB_CONN} up 2
 
 .PHONY: migrate-down
 migrate-down:
-	docker-compose exec app migrate --source file://migrations --database ${DB_CONN} down 1
+	docker-compose exec app migrate --source file://migrations --database ${DB_CONN} down 2
