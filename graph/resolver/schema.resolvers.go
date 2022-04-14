@@ -5,30 +5,72 @@ package resolver
 
 import (
 	"context"
-	"fmt"
+	"todoapp/config"
+	"todoapp/datamodel"
 	"todoapp/graph/generated"
 	"todoapp/graph/model"
 )
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	//todo := datamodel.Todo{
-	//	Text: input.Text,
-	//	Done:
-	//}
-	//config.DB().Create()
-	return nil, nil
+	todo := &datamodel.Todo{
+		UserID: uint(input.UserID),
+		Title:  input.Title,
+	}
+	if err := config.DB().Create(todo).Error; err != nil {
+		return nil, err
+	}
+
+	return &model.Todo{
+		ID:     int(todo.ID),
+		Title:  todo.Title,
+		Done:   todo.Done,
+		UserID: int(todo.UserID),
+	}, nil
+}
+
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
+	user := &datamodel.User{
+		Name: input.Name,
+	}
+	if err := config.DB().Create(user).Error; err != nil {
+		return nil, err
+	}
+
+	return &model.User{
+		ID:   int(user.ID),
+		Name: user.Name,
+	}, nil
 }
 
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented"))
-}
+	var todos []datamodel.Todo
+	if err := config.DB().Find(todos).Error; err != nil {
+		return nil, err
+	}
 
-func (r *todoResolver) ID(ctx context.Context, obj *model.Todo) (int, error) {
-	panic(fmt.Errorf("not implemented"))
+	var retTodos []*model.Todo
+	for _, todo := range todos {
+		retTodos = append(retTodos, &model.Todo{
+			ID:     int(todo.ID),
+			Title:  todo.Title,
+			Done:   todo.Done,
+			UserID: int(todo.UserID),
+		})
+	}
+
+	return retTodos, nil
 }
 
 func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	user := &datamodel.User{}
+	if err := config.DB().First(user, obj.UserID).Error; err != nil {
+		return nil, err
+	}
+
+	return &model.User{
+		ID:   int(user.ID),
+		Name: user.Name,
+	}, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.

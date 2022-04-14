@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Todo struct {
 	gorm.Model
-	UserID uint32
+	UserID uint
 	Title  string
 	Done   bool
 }

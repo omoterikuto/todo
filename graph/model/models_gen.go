@@ -3,8 +3,12 @@
 package model
 
 type NewTodo struct {
-	Text   string `json:"text"`
+	Title  string `json:"title"`
 	UserID int    `json:"userID"`
+}
+
+type NewUser struct {
+	Name string `json:"name"`
 }
 
 type User struct {

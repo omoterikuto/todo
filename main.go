@@ -18,6 +18,12 @@ func main() {
 	if err := config.InitDB(); err != nil {
 		log.Fatal("failed to InitDB")
 	}
+	// todo いる？
+	defer func() {
+		if sqlDb, err := config.DB().DB(); err == nil {
+			sqlDb.Close()
+		}
+	}()
 
 	port := os.Getenv("PORT")
 	if port == "" {

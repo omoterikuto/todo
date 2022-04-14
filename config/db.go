@@ -12,12 +12,11 @@ import (
 var db *gorm.DB
 
 func InitDB() error {
-	conn, err := gorm.Open(postgres.Open(dbsn()), &gorm.Config{})
+	var err error
+	db, err = gorm.Open(postgres.Open(dbsn()), &gorm.Config{})
 	if err != nil {
 		return err
 	}
-
-	db = conn.Set("gorm:auto_update", false)
 
 	return nil
 }
