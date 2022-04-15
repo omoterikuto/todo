@@ -6,5 +6,4 @@ CREATE TABLE todos (
     created_at timestamp NOT NULL,
     updated_at timestamp NOT NULL,
     deleted_at timestamp NULL DEFAULT NULL
-    FOREIGN KEY (user_id) REFERENCES users(id)
 )
