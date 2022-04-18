@@ -8,6 +8,6 @@ COPY go.mod go.sum ./
 
 RUN go mod download
 
-COPY . .
+COPY .. .
 
 CMD ["go", "run", "main.go"]
