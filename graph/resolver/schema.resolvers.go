@@ -12,11 +12,11 @@ import (
 )
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	todo := &datamodel.Todo{
+	todo := datamodel.Todo{
 		UserID: uint(input.UserID),
 		Title:  input.Title,
 	}
-	if err := config.DB().Create(todo).Error; err != nil {
+	if err := config.DB().Create(&todo).Error; err != nil {
 		return nil, err
 	}
 
@@ -29,10 +29,10 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 }
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	user := &datamodel.User{
+	user := datamodel.User{
 		Name: input.Name,
 	}
-	if err := config.DB().Create(user).Error; err != nil {
+	if err := config.DB().Create(&user).Error; err != nil {
 		return nil, err
 	}
 
@@ -44,7 +44,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 	var todos []datamodel.Todo
-	if err := config.DB().Find(todos).Error; err != nil {
+	if err := config.DB().Find(&todos).Error; err != nil {
 		return nil, err
 	}
 
@@ -62,8 +62,8 @@ func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 }
 
 func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
-	user := &datamodel.User{}
-	if err := config.DB().First(user, obj.UserID).Error; err != nil {
+	user := datamodel.User{}
+	if err := config.DB().First(&user, obj.UserID).Error; err != nil {
 		return nil, err
 	}
 
