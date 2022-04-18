@@ -1,0 +1,37 @@
+fragment todoFields on Todo {
+    id
+    title
+    done
+    user {
+        id
+        name
+    }
+}
+
+query todos {
+   todos {
+       ... todoFields
+   }
+}
+
+mutation createTodo(
+    $title: String!
+    $userID: Int!
+) {
+    createTodo(
+        input: { title: $title, userID: $userID }
+    ) {
+        ...todoFields
+    }
+}
+
+mutation createUser(
+    $name: String!
+) {
+    createUser(
+        input: { name: $name }
+    ) {
+        id
+        name
+    }
+}
